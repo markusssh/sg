@@ -1,10 +1,11 @@
-package dev.sg.users;
+package dev.sg.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -13,40 +14,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-@Table(name = "users")
+@Table(name = "links")
 @Entity
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class LinkEntity {
 
     @Id
     @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
+            name = "link_sequence",
+            sequenceName = "link_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
+            generator = "link_sequence"
     )
     private Long id;
 
-    private String name;
-    private String surname;
-    private String patronymic;
-    private Integer phone;
-    private String password;
-    private LocalDate birthdate;
-    private String email;
-    private Boolean isMale;
-    private Boolean isBanned;
-    private Role role;
-    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "report_id")
+    private ReportEntity report;
+
+    private String link;
+
+
 
 }

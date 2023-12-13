@@ -1,9 +1,15 @@
-package dev.sg.reports;
+package dev.sg.entities;
 
+import dev.sg.enums.Status;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -37,19 +43,22 @@ public class ReportEntity {
     )
     private Long id;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity user;*/
+    private UserEntity user;
+
+    @Column(length = 30000)
+    private String body;
 
     @OneToMany(mappedBy = "report")
     List<LinkEntity> links;
 
-    private String title;
-    private String body;
     private String address;
     private String geotag;
-    private Byte status;
     private Boolean isStatusChanged;
     private LocalDateTime createdAt;
-    private LocalDateTime publishedAt;
+    private Integer categoryId;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
