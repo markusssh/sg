@@ -12,5 +12,9 @@ public class SortingDTO {
     private int[] parentCategoryIDs;
     private Status status;
     private DateRange dateRange;
+    private boolean sortFromMinToMax;
+    private int pageNum;
+    private String searchQuery;
+    private int pageSize;
 
 }

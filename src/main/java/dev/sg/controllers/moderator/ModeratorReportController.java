@@ -41,7 +41,6 @@ public class ModeratorReportController {
                     HttpStatus.NOT_FOUND
             );
         }
-
     }
 
     @GetMapping("{id}")

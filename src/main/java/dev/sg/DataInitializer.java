@@ -98,7 +98,7 @@ public class DataInitializer {
         }
     }
 
-    private void generateReports() {
+    private void generateReports() { //TODO: улучшить - проверка на подподкатегорию, генерация текста
         for (int i = 0; i < 10000; i++) {
             ReportEntity reportEntity = new ReportEntity();
             reportEntity.setLinks(null);

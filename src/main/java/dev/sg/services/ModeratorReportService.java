@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,22 +23,51 @@ public class ModeratorReportService {
     private final CategoryRepo categoryRepo;
 
     public List<ReportDTO> getReportsSorted(SortingDTO sortingDTO) {
+
         List<Integer> categoryIDs = new ArrayList<>();
-        for (int id:
-                sortingDTO.getParentCategoryIDs()) {
+
+        for (int id : sortingDTO.getParentCategoryIDs()) {
             List<CategoryEntity> categories = categoryRepo.findAllByParentId(id).orElseThrow();
-            List<Integer> categoryIDsForParent = categories.stream()
-                    .map(CategoryEntity::getId)
-                    .toList();
+            List<Integer> categoryIDsForParent;
+            if (sortingDTO.getSearchQuery().isEmpty()) {
+                categoryIDsForParent = categories.stream()
+                        .map(CategoryEntity::getId)
+                        .toList();
+            } else {
+                categoryIDsForParent = categories.stream()
+                        .filter(
+                                category -> category.getName().toLowerCase().replaceAll("(?U)[\\pP\\s]", "")
+                                .contains(sortingDTO.getSearchQuery().toLowerCase().replaceAll("(?U)[\\pP\\s]", ""))
+                        )
+                        .map(CategoryEntity::getId)
+                        .toList();
+            }
             categoryIDs.addAll(categoryIDsForParent);
         }
-        List<ReportEntity> reportEntities = reportRepo.findAll(ReportSpecifications.createSpecification(sortingDTO, categoryIDs));
-        List<ReportDTO> reportDTOList = new ArrayList<>();
-        for (ReportEntity entity:
-             reportEntities) {
-            reportDTOList.add(ReportDTO.map(entity));
+
+
+        List<ReportEntity> reportEntities = reportRepo.findAll(ReportSpecifications.createSpecification(sortingDTO,
+                categoryIDs));
+        if (sortingDTO.isSortFromMinToMax()) {
+            reportEntities.sort(Comparator.comparingLong(ReportEntity::getId));
+        } else {
+            reportEntities.sort(Comparator.comparingLong(ReportEntity::getId).reversed());
         }
-        return reportDTOList;
+
+        int startIndex = (sortingDTO.getPageNum() - 1) * sortingDTO.getPageSize();
+        int endIndex = startIndex + sortingDTO.getPageSize();
+        endIndex = Math.min(endIndex, reportEntities.size());
+        if (startIndex > endIndex) return new ArrayList<>(); //если страница пустая
+        else {
+            List<ReportEntity> pagedReportEntities = reportEntities.subList(startIndex, endIndex);
+
+            List<ReportDTO> pagedReportDTOList = new ArrayList<>();
+            for (ReportEntity entity : pagedReportEntities) {
+                pagedReportDTOList.add(ReportDTO.map(entity));
+            }
+
+            return pagedReportDTOList;
+        }
     }
 
     public ReportDTO getReportById(Long id) {
