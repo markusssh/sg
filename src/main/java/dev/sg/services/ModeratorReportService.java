@@ -9,6 +9,7 @@ import dev.sg.repositories.CategoryRepo;
 import dev.sg.repositories.ReportRepo;
 import dev.sg.specifications.ReportSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,8 +23,7 @@ public class ModeratorReportService {
     private final ReportRepo reportRepo;
     private final CategoryRepo categoryRepo;
 
-    public List<ReportDTO> getReportsSorted(SortingDTO sortingDTO) {
-
+    public Pair<List<ReportDTO>,Integer> getReportsSortedAndPageLimit(SortingDTO sortingDTO) {
         List<Integer> categoryIDs = new ArrayList<>();
 
         for (int id : sortingDTO.getParentCategoryIDs()) {
@@ -57,8 +57,9 @@ public class ModeratorReportService {
         int startIndex = (sortingDTO.getPageNum() - 1) * sortingDTO.getPageSize();
         int endIndex = startIndex + sortingDTO.getPageSize();
         endIndex = Math.min(endIndex, reportEntities.size());
-        if (startIndex > endIndex) return new ArrayList<>(); //если страница пустая
+        if (startIndex > endIndex) return Pair.of(new ArrayList<>(), 0); //если страница пустая
         else {
+            int pageLimit = reportEntities.size() / sortingDTO.getPageSize() + 1;
             List<ReportEntity> pagedReportEntities = reportEntities.subList(startIndex, endIndex);
 
             List<ReportDTO> pagedReportDTOList = new ArrayList<>();
@@ -66,7 +67,8 @@ public class ModeratorReportService {
                 pagedReportDTOList.add(ReportDTO.map(entity));
             }
 
-            return pagedReportDTOList;
+            return Pair.of(pagedReportDTOList, pageLimit);
+
         }
     }
 
