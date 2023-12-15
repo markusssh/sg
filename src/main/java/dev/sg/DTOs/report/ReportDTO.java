@@ -17,6 +17,7 @@ public class ReportDTO {
     private String username;
     private String body;
     private List<String> links;
+    private String address;
     private String geotag;
     private Boolean isStatusChanged;
     private DateRange dateRange;
@@ -30,6 +31,7 @@ public class ReportDTO {
                 .username(reportEntity.getUser().getUsername())
                 .body(reportEntity.getBody())
                 .links(reportEntity.getLinks().stream().map(LinkEntity::getLink).collect(Collectors.toList()))
+                .address(reportEntity.getAddress())
                 .geotag(reportEntity.getGeotag())
                 .isStatusChanged(reportEntity.getIsStatusChanged())
                 .categoryId(reportEntity.getCategoryId())
