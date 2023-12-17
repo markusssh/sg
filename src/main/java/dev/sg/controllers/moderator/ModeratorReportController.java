@@ -35,9 +35,10 @@ public class ModeratorReportController {
             if (reportsSortedAndPageLimit.getReport().isEmpty()) {
                 return ResponseEntity.notFound().build();
             } else {
-                return ResponseEntity
-                        .ok()
-                        .body(reportsSortedAndPageLimit);
+                return new ResponseEntity<>(
+                        new AppError(HttpStatus.NOT_FOUND.value(), "Report not found"),
+                        HttpStatus.NOT_FOUND
+                );
             }
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
