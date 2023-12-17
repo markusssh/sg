@@ -2,8 +2,10 @@ package dev.sg.services;
 
 import dev.sg.DTOs.report.ReportDTO;
 import dev.sg.DTOs.sorting.SortingDTO;
+import dev.sg.DTOs.user.UserDTO;
 import dev.sg.entities.CategoryEntity;
 import dev.sg.entities.ReportEntity;
+import dev.sg.entities.UserEntity;
 import dev.sg.enums.Status;
 import dev.sg.repositories.CategoryRepo;
 import dev.sg.repositories.ReportRepo;
@@ -95,4 +97,10 @@ public class ModeratorReportService {
         report.setIsStatusChanged(true);
         reportRepo.save(report);
     }
+
+    public UserDTO getReportUser(Long reportId) {
+        ReportEntity report =  reportRepo.findById(reportId).orElseThrow();
+        return UserDTO.map(report.getUser());
+    }
+
 }

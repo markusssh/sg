@@ -2,6 +2,7 @@ package dev.sg.controllers.moderator;
 
 import dev.sg.DTOs.report.ReportDTO;
 import dev.sg.DTOs.sorting.SortingDTO;
+import dev.sg.DTOs.user.UserDTO;
 import dev.sg.enums.Status;
 import dev.sg.exeptions.AppError;
 import dev.sg.services.ModeratorReportService;
@@ -27,6 +28,19 @@ import java.util.NoSuchElementException;
 public class ModeratorReportController {
 
     private final ModeratorReportService moderatorReportService;
+
+    @GetMapping("user/{reportId}")
+    public ResponseEntity<?> getReportUser(@PathVariable Long reportId) {
+        try {
+            UserDTO userDTO =  moderatorReportService.getReportUser(reportId);
+            return ResponseEntity.ok(userDTO);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(
+                    new AppError(HttpStatus.NOT_FOUND.value(), "Report not found"),
+                    HttpStatus.NOT_FOUND
+            );
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> getReportsSorted(@RequestBody SortingDTO sortingDTO) {

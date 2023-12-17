@@ -1,5 +1,6 @@
 package dev.sg.DTOs.user;
 
+import dev.sg.entities.UserEntity;
 import dev.sg.enums.Gender;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,20 @@ public class UserDTO {
     private LocalDate birthdate;
     private String email;
     private Gender gender;
+
+    public static UserDTO map(UserEntity userEntity) {
+        return UserDTO
+                .builder()
+                .id(userEntity.getId())
+                .username(userEntity.getUsername())
+                .name(userEntity.getName())
+                .surname(userEntity.getSurname())
+                .patronymic(userEntity.getPatronymic())
+                .phone(userEntity.getPhone())
+                .birthdate(userEntity.getBirthdate())
+                .email(userEntity.getEmail())
+                .gender(userEntity.getGender())
+                .build();
+    }
 
 }
