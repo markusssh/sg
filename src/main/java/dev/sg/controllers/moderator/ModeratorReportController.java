@@ -7,7 +7,6 @@ import dev.sg.exeptions.AppError;
 import dev.sg.services.ModeratorReportService;
 import dev.sg.utils.PairOfReportsAndPageLimit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +33,7 @@ public class ModeratorReportController {
         try {
             PairOfReportsAndPageLimit<List<ReportDTO>,Integer> reportsSortedAndPageLimit = moderatorReportService.getReportsSortedAndPageLimit(sortingDTO);
             if (reportsSortedAndPageLimit.getReport().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return ResponseEntity.notFound().build();
             } else {
                 return ResponseEntity
                         .ok()

@@ -186,7 +186,6 @@ public class DataInitializer {
         List<ReportEntity> reportsToSave = IntStream.range(0, totalReports)
                 .mapToObj(i -> {
                     ReportEntity reportEntity = new ReportEntity();
-                    reportEntity.setLinks(randomizeLinks());
                     reportEntity.setCategoryId(randomizeCategoryId());
                     reportEntity.setAddress("*address");
                     reportEntity.setGeotag(randomizeGeotag());
@@ -195,6 +194,9 @@ public class DataInitializer {
                     reportEntity.setIsStatusChanged(randomizeBool());
                     reportEntity.setCreatedAt(randomizeCreatedAt());
                     reportEntity.setStatus(randomizeStatus());
+                    List<LinkEntity> links = randomizeLinks();
+                    links.forEach(link -> link.setReport(reportEntity));
+                    reportEntity.setLinks(links);
                     return reportEntity;
                 }).collect(Collectors.toList());
 
