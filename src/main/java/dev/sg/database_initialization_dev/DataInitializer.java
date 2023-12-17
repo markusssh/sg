@@ -226,9 +226,21 @@ public class DataInitializer {
 
     private String randomizeGeotag() {
         Random random = new Random();
-        double latitude = -90 + (90 - (-90)) * random.nextDouble();
-        double longitude = -180 + (180 - (-180)) * random.nextDouble();
-        return String.format("%.6f %.6f", latitude, longitude);
+        String[] geotags = new String[]{
+                "59,945235 30,269925",
+                "59,938878 30,288517",
+                "59,934083 30,306125",
+                "59,933228 30,314515",
+                "59,940737 30,337584",
+                "59,994984 30,301852",
+                "59,906684 30,298683",
+                "59,950384 30,315343",
+                "59,943156 30,279630",
+                "59,934943 30,332325",
+                "59,982888 30,201427",
+                "59,979284 30,258734"
+        };
+        return geotags[random.nextInt()];
     }
 
     private Map<Integer, String> loadCategoryNames() {
