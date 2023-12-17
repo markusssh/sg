@@ -27,28 +27,20 @@ public class ModeratorReportService {
     public PairOfReportsAndPageLimit<List<ReportDTO>,Integer> getReportsSortedAndPageLimit(SortingDTO sortingDTO) {
         List<Integer> categoryIDs = new ArrayList<>();
 
-        for (int id : sortingDTO.getParentCategoryIDs()) {
-            List<CategoryEntity> categories = categoryRepo.findAllByParentId(id).orElseThrow();
-            List<Integer> categoryIDsForParent;
-            if (sortingDTO.getSearchQuery().isEmpty()) {
-                categoryIDsForParent = categories.stream()
-                        .map(CategoryEntity::getId)
-                        .toList();
-            } else {
-                categoryIDsForParent = categories.stream()
-                        .filter(
-                                category -> category.getName().toLowerCase().replaceAll("(?U)[\\pP\\s]", "")
-                                .contains(sortingDTO.getSearchQuery().toLowerCase().replaceAll("(?U)[\\pP\\s]", ""))
-                        )
-                        .map(CategoryEntity::getId)
-                        .toList();
+        if (sortingDTO.getParentCategoryIDs().length!=0) {
+            for (int id : sortingDTO.getParentCategoryIDs()) {
+                List<CategoryEntity> categories = categoryRepo.findAllByParentId(id).orElseThrow();
+                List<Integer> categoryIDsForParent = getFilteredCategoryIDs(sortingDTO, categories);
+                categoryIDs.addAll(categoryIDsForParent);
             }
-            categoryIDs.addAll(categoryIDsForParent);
+        } else {
+            List<CategoryEntity> allCategories = categoryRepo.findAll();
+            categoryIDs = getFilteredCategoryIDs(sortingDTO, allCategories);
         }
-
 
         List<ReportEntity> reportEntities = reportRepo.findAll(ReportSpecifications.createSpecification(sortingDTO,
                 categoryIDs));
+
         if (sortingDTO.isSortFromMinToMax()) {
             reportEntities.sort(Comparator.comparingLong(ReportEntity::getId));
         } else {
@@ -70,6 +62,22 @@ public class ModeratorReportService {
 
             return PairOfReportsAndPageLimit.of(pagedReportDTOList, pageLimit);
 
+        }
+    }
+
+    private List<Integer> getFilteredCategoryIDs(SortingDTO sortingDTO, List<CategoryEntity> categories) {
+        if (sortingDTO.getSearchQuery().isEmpty()) {
+            return categories.stream()
+                    .map(CategoryEntity::getId)
+                    .toList();
+        } else {
+            return categories.stream()
+                    .filter(
+                            category -> category.getName().toLowerCase().replaceAll("(?U)[\\pP\\s]", "")
+                                    .contains(sortingDTO.getSearchQuery().toLowerCase().replaceAll("(?U)[\\pP\\s]", ""))
+                    )
+                    .map(CategoryEntity::getId)
+                    .toList();
         }
     }
 

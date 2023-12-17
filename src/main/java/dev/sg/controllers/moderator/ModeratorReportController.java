@@ -34,7 +34,10 @@ public class ModeratorReportController {
         try {
             PairOfReportsAndPageLimit<List<ReportDTO>,Integer> reportsSortedAndPageLimit = moderatorReportService.getReportsSortedAndPageLimit(sortingDTO);
             if (reportsSortedAndPageLimit.getReport().isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(
+                        new AppError(HttpStatus.NOT_FOUND.value(), "Reports not found"),
+                        HttpStatus.NOT_FOUND
+                );
             } else {
                 return ResponseEntity
                         .ok()
