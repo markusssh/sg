@@ -9,6 +9,7 @@ import dev.sg.entities.UserEntity;
 import dev.sg.enums.Status;
 import dev.sg.repositories.ReportRepo;
 import dev.sg.repositories.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,21 +21,24 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ReportService {
 
     private final ReportRepo reportRepo;
     private final UserRepo userRepo;
-    private final LinkService linkService;
 
     public ReportDTO saveReport(
             ReportPostRequest request,
             String username
     ) {
         UserEntity user = userRepo.findByUsername(username).orElseThrow();
-
+        String[] links = request.getLinks();
         ReportEntity report = new ReportEntity();
-        reportRepo.save(report);
-        List<LinkEntity> linkEntityList = linkService.saveLinks(request.getLinks(), report);
+
+        List<LinkEntity> linkEntityList = new ArrayList<>();
+        for (String link : links) {
+            linkEntityList.add(LinkEntity.builder().link(link).build());
+        }
 
         report.setBody(request.getBody());
         report.setAddress(request.getAddress());

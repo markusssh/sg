@@ -1,6 +1,7 @@
 package dev.sg.entities;
 
 import dev.sg.enums.Status;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -50,7 +51,7 @@ public class ReportEntity {
     @Column(length = 30000)
     private String body;
 
-    @OneToMany(mappedBy = "report")
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
     List<LinkEntity> links;
 
     private String address;
