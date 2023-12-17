@@ -1,5 +1,6 @@
 package dev.sg;
 
+import dev.sg.database_initialization_dev.DataInitializer;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +18,6 @@ public class SgApplication {
 
     @PostConstruct
     public void initializeDataOnStartup() {
-        dataInitializer.initializeData();
+        dataInitializer.initialize();
     }
 }

@@ -23,7 +23,7 @@ public class CategoryController {
         try {
             return ResponseEntity.ok(service.findById(id));
         } catch (IllegalArgumentException e) {
-            return (ResponseEntity<?>) ResponseEntity.notFound();
+            return ResponseEntity.notFound().build();
         }
     }
 

@@ -41,6 +41,4 @@ public class LinkEntity {
 
     private String link;
 
-
-
 }
