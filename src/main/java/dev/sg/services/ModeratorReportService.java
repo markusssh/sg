@@ -38,6 +38,10 @@ public class ModeratorReportService {
             categoryIDs = getFilteredCategoryIDs(sortingDTO, allCategories);
         }
 
+        if (categoryIDs.isEmpty()) {
+            return null;
+        }
+
         List<ReportEntity> reportEntities = reportRepo.findAll(ReportSpecifications.createSpecification(sortingDTO,
                 categoryIDs));
 

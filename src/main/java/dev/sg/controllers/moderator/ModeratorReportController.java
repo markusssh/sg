@@ -32,7 +32,7 @@ public class ModeratorReportController {
     public ResponseEntity<?> getReportsSorted(@RequestBody SortingDTO sortingDTO) {
         try {
             PairOfReportsAndPageLimit<List<ReportDTO>,Integer> reportsSortedAndPageLimit = moderatorReportService.getReportsSortedAndPageLimit(sortingDTO);
-            if (reportsSortedAndPageLimit.getReport().isEmpty()) {
+            if (reportsSortedAndPageLimit == null || reportsSortedAndPageLimit.getReport().isEmpty()) {
                 return new ResponseEntity<>(
                         new AppError(HttpStatus.NOT_FOUND.value(), "Reports not found"),
                         HttpStatus.NOT_FOUND
