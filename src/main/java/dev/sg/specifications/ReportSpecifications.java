@@ -17,7 +17,7 @@ public class ReportSpecifications {
     public static Specification<ReportEntity> createSpecification(SortingDTO sortingDTO, List<Integer> categoryIDs) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (sortingDTO.getParentCategoryIDs() != null && sortingDTO.getParentCategoryIDs().length > 0) {
+            if (categoryIDs != null && !categoryIDs.isEmpty()) {
                 predicates.add(root.get("categoryId").in(categoryIDs));
             }
 
