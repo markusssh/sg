@@ -33,12 +33,14 @@ public class ModeratorReportController {
         try {
             PairOfReportsAndPageLimit<List<ReportDTO>,Integer> reportsSortedAndPageLimit = moderatorReportService.getReportsSortedAndPageLimit(sortingDTO);
             if (reportsSortedAndPageLimit.getReport().isEmpty()) {
-                return ResponseEntity.notFound().build();
-            } else {
                 return new ResponseEntity<>(
                         new AppError(HttpStatus.NOT_FOUND.value(), "Report not found"),
                         HttpStatus.NOT_FOUND
                 );
+            } else {
+                return ResponseEntity
+                        .ok()
+                        .body(reportsSortedAndPageLimit);
             }
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
