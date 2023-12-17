@@ -209,13 +209,10 @@ public class DataInitializer {
                 "https://api.psychologos.ru/storage/image/548226ccc5a145dfd3ddcc263fa3a04e.jpg",
                 "https://gsrsystem.ru/wp-content/uploads/2020/01/IMG_6958.jpg",
                 "https://udoba.org/sites/default/files/h5p/content/6879/images/image-6033a7f2bd538.jpg",
-                "https://a.d-cd.net/3a51d96s-1920.jpg",
                 "https://png.pngtree.com/png-vector/20210312/ourlarge/pngtree-a-person-who-is-oppressed-by-the-problem-png-image_3050020.jpg",
                 "https://t4.ftcdn.net/jpg/02/79/13/27/360_F_279132718_FwcEPzRC62Eay4creqr8eG0Q4Bkc9PuF.jpg",
                 "y_50/v1481647111/i5kq2sxt7lregfvxo6al.jpg",
                 "https://i08.fotocdn.net/s122/595d19f7c5f12696/public_pin_l/2792742172.jpg",
-                "https://a.d-cd.net/818e64ds-1920.jpg",
-                "https://a.d-cd.net/2WAAAgDUieA-960.jpg",
                 "https://moyaokruga.ru/img/image_big/73a1cb3c-7f41-4c54-9bd9-28ea8113c981.jpg",
                 "https://i.pinimg.com/originals/73/ed/d9/73edd99a9adc697adbfbd85d90638d29.jpg"
         };
