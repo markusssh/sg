@@ -5,6 +5,7 @@ import dev.sg.DTOs.sorting.SortingDTO;
 import dev.sg.enums.Status;
 import dev.sg.exeptions.AppError;
 import dev.sg.services.ModeratorReportService;
+import dev.sg.utils.PairOfReportsAndPageLimit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,13 @@ public class ModeratorReportController {
     @PostMapping
     public ResponseEntity<?> getReportsSorted(@RequestBody SortingDTO sortingDTO) {
         try {
-            Pair<List<ReportDTO>,Integer> reportsSortedAndPageLimit = moderatorReportService.getReportsSortedAndPageLimit(sortingDTO);
-            if (reportsSortedAndPageLimit.getFirst().isEmpty()) {
+            PairOfReportsAndPageLimit<List<ReportDTO>,Integer> reportsSortedAndPageLimit = moderatorReportService.getReportsSortedAndPageLimit(sortingDTO);
+            if (reportsSortedAndPageLimit.getReport().isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
                 return ResponseEntity
                         .ok()
-                        .header("x-page-limit", reportsSortedAndPageLimit.getSecond().toString())
-                        .body(reportsSortedAndPageLimit.getFirst());
+                        .body(reportsSortedAndPageLimit);
             }
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
