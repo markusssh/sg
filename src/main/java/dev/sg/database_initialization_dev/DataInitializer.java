@@ -240,7 +240,7 @@ public class DataInitializer {
                 "59,982888 30,201427",
                 "59,979284 30,258734"
         };
-        return geotags[random.nextInt()];
+        return geotags[random.nextInt(geotags.length)];
     }
 
     private Map<Integer, String> loadCategoryNames() {
