@@ -82,8 +82,7 @@ public class ModeratorReportController {
             @RequestParam Status status
     ) {
         try {
-            moderatorReportService.changeStatus(id, status);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(moderatorReportService.changeStatus(id, status));
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
                     new AppError(HttpStatus.NOT_FOUND.value(), "Report not found"),

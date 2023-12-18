@@ -91,11 +91,11 @@ public class ModeratorReportService {
         return ReportDTO.map(reportRepo.findById(id).orElseThrow());
     }
 
-    public void changeStatus(Long id, Status status) {
+    public ReportDTO changeStatus(Long id, Status status) {
         ReportEntity report = reportRepo.findById(id).orElseThrow();
         report.setStatus(status);
         report.setIsStatusChanged(true);
-        reportRepo.save(report);
+        return(ReportDTO.map(reportRepo.save(report)));
     }
 
     public UserDTO getReportUser(Long reportId) {
