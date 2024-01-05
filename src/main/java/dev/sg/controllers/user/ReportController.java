@@ -2,13 +2,13 @@ package dev.sg.controllers.user;
 
 import dev.sg.DTOs.report.ReportDTO;
 import dev.sg.DTOs.report.ReportPostRequest;
+import dev.sg.DTOs.report.ShortReportDTO;
 import dev.sg.exeptions.AppError;
 import dev.sg.services.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,8 +36,8 @@ public class ReportController {
             return ResponseEntity.ok(report);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
-                    new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Server error"),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    new AppError(HttpStatus.UNAUTHORIZED.value(), "Credentials have changed"),
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
@@ -45,7 +45,7 @@ public class ReportController {
     @GetMapping()
     public ResponseEntity<?> getAllReportsOfUser(Principal principal) {
         try {
-            List<ReportDTO> reports = service.getAllByUsername(principal.getName());
+            List<ShortReportDTO> reports = service.getAllByUsername(principal.getName());
             if (!reports.isEmpty()) {
                 return ResponseEntity.ok(reports);
             } else {
@@ -53,8 +53,8 @@ public class ReportController {
             }
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
-                    new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Server error"),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    new AppError(HttpStatus.UNAUTHORIZED.value(), "Credentials have changed"),
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
@@ -62,7 +62,7 @@ public class ReportController {
     @GetMapping("notifications")
     public ResponseEntity<?> getAllNotificationsOfUser(Principal principal) {
         try {
-            List<ReportDTO> reports = service.getAllByUsernameAndNotification(principal.getName());
+            List<ShortReportDTO> reports = service.getAllByUsernameAndNotification(principal.getName());
             if (!reports.isEmpty()) {
                 return ResponseEntity.ok(reports);
             } else {
@@ -70,20 +70,19 @@ public class ReportController {
             }
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(
-                    new AppError(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Server error"),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    new AppError(HttpStatus.UNAUTHORIZED.value(), "Credentials have changed"),
+                    HttpStatus.UNAUTHORIZED
             );
         }
     }
 
-    @PatchMapping("notifications/{id}/flag_down")
-    public ResponseEntity<?> flagDownNotification(
+    @GetMapping("{id}")
+    public ResponseEntity<?> getReport(
             @PathVariable Long id,
             Principal principal
     ) {
         try {
-            service.flagDown(id, principal.getName());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(service.checkReport(id, principal.getName()));
         } catch (SecurityException e) {
             return new ResponseEntity<>(
                     new AppError(HttpStatus.FORBIDDEN.value(), "Couldn't reach the report"),

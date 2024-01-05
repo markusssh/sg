@@ -1,5 +1,7 @@
 package dev.sg.configurations;
 
+import dev.sg.entities.BadTokenEntity;
+import dev.sg.repositories.BadTokenRepo;
 import dev.sg.utils.JwtTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
+    private final BadTokenRepo badTokenRepo;
 
     @Override
     protected void doFilterInternal(
@@ -36,12 +40,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            try {
-                username = jwtTokenUtils.getUsername(jwt);
-            } catch (ExpiredJwtException e) {
-                log.debug("Token lifetime has expired");
-            } catch (SignatureException e) {
-                log.debug("Wrong signature");
+            Optional<BadTokenEntity> badToken = badTokenRepo.findBadTokenEntityByToken(jwt);
+            if (badToken.isEmpty()) {
+                try {
+                    username = jwtTokenUtils.getUsername(jwt);
+                } catch (ExpiredJwtException e) {
+                    log.debug("Token lifetime has expired");
+                } catch (SignatureException e) {
+                    log.debug("Wrong signature");
+                }
+            } else {
+                log.debug("Bad token!");
             }
         }
 

@@ -5,14 +5,12 @@ import dev.sg.DTOs.sorting.SortingDTO;
 import dev.sg.DTOs.user.UserDTO;
 import dev.sg.entities.CategoryEntity;
 import dev.sg.entities.ReportEntity;
-import dev.sg.entities.UserEntity;
 import dev.sg.enums.Status;
 import dev.sg.repositories.CategoryRepo;
 import dev.sg.repositories.ReportRepo;
 import dev.sg.specifications.ReportSpecifications;
 import dev.sg.utils.PairOfReportsAndPageLimit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

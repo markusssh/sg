@@ -2,6 +2,7 @@ package dev.sg.entities;
 
 import dev.sg.enums.Gender;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -44,14 +45,15 @@ public class UserEntity {
     )
     private Long id;
 
+    @Column(unique = true)
     private String username;
+
     private String name;
     private String surname;
     private String patronymic;
     private Long phone;
     private String passwordHashed;
     private LocalDate birthdate;
-    private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportEntity> reports = new ArrayList<>();

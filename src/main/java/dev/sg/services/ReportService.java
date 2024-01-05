@@ -3,6 +3,7 @@ package dev.sg.services;
 
 import dev.sg.DTOs.report.ReportDTO;
 import dev.sg.DTOs.report.ReportPostRequest;
+import dev.sg.DTOs.report.ShortReportDTO;
 import dev.sg.entities.LinkEntity;
 import dev.sg.entities.ReportEntity;
 import dev.sg.entities.UserEntity;
@@ -37,7 +38,7 @@ public class ReportService {
 
         List<LinkEntity> linkEntityList = new ArrayList<>();
         for (String link : links) {
-            linkEntityList.add(LinkEntity.builder().link(link).build());
+            linkEntityList.add(LinkEntity.builder().link(link).report(report).build());
         }
 
         report.setBody(request.getBody());
@@ -56,35 +57,35 @@ public class ReportService {
     }
 
 
-    public List<ReportDTO> getAllByUsername(String username) {
+    public List<ShortReportDTO> getAllByUsername(String username) {
         UserEntity user = userRepo.findByUsername(username).orElseThrow();
         Optional<List<ReportEntity>> reportEntities = reportRepo.findAllByUser(user);
         return getReportDTOS(reportEntities);
     }
 
-    public List<ReportDTO> getAllByUsernameAndNotification(String username) {
+    public List<ShortReportDTO> getAllByUsernameAndNotification(String username) {
         UserEntity user = userRepo.findByUsername(username).orElseThrow();
         Optional<List<ReportEntity>> reportEntities = reportRepo.findAllByUserAndIsStatusChangedIsTrue(user);
         return getReportDTOS(reportEntities);
     }
 
-    private List<ReportDTO> getReportDTOS(Optional<List<ReportEntity>> reportEntities) {
+    private List<ShortReportDTO> getReportDTOS(Optional<List<ReportEntity>> reportEntities) {
         if (reportEntities.isPresent()) {
-            List<ReportDTO> reportDTOS = new ArrayList<>();
+            List<ShortReportDTO> reportDTOs = new ArrayList<>();
             for (ReportEntity report : reportEntities.get()) {
-                reportDTOS.add(ReportDTO.map(report));
+                reportDTOs.add(ShortReportDTO.map(report));
             }
-            return reportDTOS;
+            return reportDTOs;
         } else {
             return new ArrayList<>();
         }
     }
 
-    public void flagDown(Long id, String username) {
+    public ReportDTO checkReport(Long id, String username) {
         ReportEntity report = reportRepo.findById(id).orElseThrow();
         if (Objects.equals(report.getUser().getUsername(), username)) {
             report.setIsStatusChanged(false);
-            reportRepo.save(report);
+            return ReportDTO.map(reportRepo.save(report));
         } else {
             throw new SecurityException();
         }

@@ -37,7 +37,9 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/moderator/**").hasRole("MODERATOR")
                         .requestMatchers("/category/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll())
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/terms/**").permitAll()
+                )
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(handling -> handling

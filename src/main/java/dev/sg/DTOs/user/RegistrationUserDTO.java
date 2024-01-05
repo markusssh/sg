@@ -19,7 +19,6 @@ public class RegistrationUserDTO {
      */
     private String birthdate;
 
-    private String email;
     private Gender gender;
 
 

@@ -1,5 +1,7 @@
 package dev.sg.services;
 
+import dev.sg.DTOs.user.UserDTO;
+import dev.sg.DTOs.user.UserDetailsChangeRequest;
 import dev.sg.entities.UserEntity;
 import dev.sg.repositories.UserRepo;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,12 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepo userRepo;
+
+    public UserDTO getDetails(String name) {
+        return UserDTO.map(
+                userRepo.findByUsername(name).orElseThrow()
+        );
+    }
 
     public Optional<UserEntity> findByUsername(String username) {
         return userRepo.findByUsername(username);
@@ -40,4 +48,15 @@ public class UserService implements UserDetailsService {
             );
     }
 
+    public UserDTO changeDetails(String name, UserDetailsChangeRequest userDetailsChangeRequest) {
+        UserEntity user = userRepo.findByUsername(name).orElseThrow();
+        user.setUsername(userDetailsChangeRequest.getPhone().toString());
+        user.setName(userDetailsChangeRequest.getName());
+        user.setSurname(userDetailsChangeRequest.getSurname());
+        user.setPatronymic(userDetailsChangeRequest.getPatronymic());
+        user.setPhone(userDetailsChangeRequest.getPhone());
+        user.setBirthdate(userDetailsChangeRequest.getBirthdate());
+        user.setGender(userDetailsChangeRequest.getGender());
+        return UserDTO.map(userRepo.save(user));
+    }
 }

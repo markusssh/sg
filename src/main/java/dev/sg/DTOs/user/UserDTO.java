@@ -18,7 +18,6 @@ public class UserDTO {
     private String patronymic;
     private Long phone;
     private LocalDate birthdate;
-    private String email;
     private Gender gender;
 
     public static UserDTO map(UserEntity userEntity) {
@@ -31,7 +30,6 @@ public class UserDTO {
                 .patronymic(userEntity.getPatronymic())
                 .phone(userEntity.getPhone())
                 .birthdate(userEntity.getBirthdate())
-                .email(userEntity.getEmail())
                 .gender(userEntity.getGender())
                 .build();
     }

@@ -130,7 +130,6 @@ public class DataInitializer {
                             .surname("Юзеров")
                             .patronymic("Юзерович")
                             .birthdate("2002-03-01")
-                            .email("user@email.com")
                             .gender(Gender.M)
                             .build()
             );
@@ -144,7 +143,6 @@ public class DataInitializer {
                             .surname("Юзерова")
                             .patronymic("Юзеровна")
                             .birthdate("2024-01-01")
-                            .email("user1@email.com")
                             .gender(Gender.F)
                             .build()
             );
@@ -158,7 +156,6 @@ public class DataInitializer {
                             .surname("АААов")
                             .patronymic("АААвич")
                             .birthdate("2077-04-13")
-                            .email("user2@email.com")
                             .gender(Gender.M)
                             .build()
             );
@@ -180,7 +177,7 @@ public class DataInitializer {
     }
 
     private void generateReports() {
-        int totalReports = 10000;
+        int totalReports = 30;
         Map<Integer, String> categoryNames = loadCategoryNames();
 
         List<ReportEntity> reportsToSave = IntStream.range(0, totalReports)
@@ -211,7 +208,6 @@ public class DataInitializer {
                 "https://udoba.org/sites/default/files/h5p/content/6879/images/image-6033a7f2bd538.jpg",
                 "https://png.pngtree.com/png-vector/20210312/ourlarge/pngtree-a-person-who-is-oppressed-by-the-problem-png-image_3050020.jpg",
                 "https://t4.ftcdn.net/jpg/02/79/13/27/360_F_279132718_FwcEPzRC62Eay4creqr8eG0Q4Bkc9PuF.jpg",
-                "y_50/v1481647111/i5kq2sxt7lregfvxo6al.jpg",
                 "https://i08.fotocdn.net/s122/595d19f7c5f12696/public_pin_l/2792742172.jpg",
                 "https://moyaokruga.ru/img/image_big/73a1cb3c-7f41-4c54-9bd9-28ea8113c981.jpg",
                 "https://i.pinimg.com/originals/73/ed/d9/73edd99a9adc697adbfbd85d90638d29.jpg"
