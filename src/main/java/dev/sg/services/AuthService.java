@@ -81,7 +81,11 @@ public class AuthService {
                             .passwordHashed(passwordEncoder.encode(registrationUserDTO.getPassword()))
                             .name(registrationUserDTO.getName())
                             .surname(registrationUserDTO.getSurname())
-                            .patronymic(registrationUserDTO.getPatronymic())
+                            .patronymic(
+                                    (registrationUserDTO.getPatronymic() == null) ?
+                                            ""
+                                            : registrationUserDTO.getPatronymic()
+                            )
                             .birthdate(
                                     (registrationUserDTO.getBirthdate() == null) ?
                                             null
