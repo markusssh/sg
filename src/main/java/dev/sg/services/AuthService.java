@@ -67,13 +67,13 @@ public class AuthService {
 
     public void createNewUser(RegistrationUserDTO registrationUserDTO) {
         if (userRepo.findByUsername(registrationUserDTO.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException(String.format("User '%s' does already exist", registrationUserDTO.getUsername()));
+            throw new UserAlreadyExistsException(String.format("User '%s' does already exist",
+                    registrationUserDTO.getUsername()));
         } else if (roleRepo.findByName("ROLE_USER").isEmpty()) {
             throw new NoSuchElementException("Table roles doesn't contain ROLE_USER");
         } else if (!isLoginValid(registrationUserDTO.getUsername())) {
             throw new IllegalLoginFormatException("Illegal login format");
-        }
-        else {
+        } else {
             userRepo.save(
                     UserEntity
                             .builder()
@@ -82,7 +82,11 @@ public class AuthService {
                             .name(registrationUserDTO.getName())
                             .surname(registrationUserDTO.getSurname())
                             .patronymic(registrationUserDTO.getPatronymic())
-                            .birthdate(LocalDate.parse(registrationUserDTO.getBirthdate()))
+                            .birthdate(
+                                    (registrationUserDTO.getBirthdate() == null) ?
+                                            null
+                                            : LocalDate.parse(registrationUserDTO.getBirthdate())
+                            )
                             .phone(Long.valueOf(registrationUserDTO.getUsername()))
                             .gender(registrationUserDTO.getGender())
                             .roles(List.of(roleRepo.findByName("ROLE_USER").get()))
@@ -93,7 +97,8 @@ public class AuthService {
 
     public void createNewModer(RegistrationModeratorDTO registrationModeratorDTO) {
         if (userRepo.findByUsername(registrationModeratorDTO.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException(String.format("user '%s' does already exist", registrationModeratorDTO.getUsername()));
+            throw new UserAlreadyExistsException(String.format("user '%s' does already exist",
+                    registrationModeratorDTO.getUsername()));
         } else if (roleRepo.findByName("ROLE_MODERATOR").isEmpty()) {
             throw new NoSuchElementException("table roles doesn't contain ROLE_USER");
         } else {
@@ -115,7 +120,7 @@ public class AuthService {
     }
 
     public boolean isLoginValid(String username) {
-        String regx = "\\d{10}";
+        String regx = "^[^0]\\d{9}$";
         Pattern pattern = Pattern.compile(regx);
         Matcher matcher = pattern.matcher(username);
         return (matcher.matches());
